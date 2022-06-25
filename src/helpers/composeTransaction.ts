@@ -193,12 +193,12 @@ export function createAddSysToUser( user: string ): EosActionStruct {
         name: 'transfer',
         authorization: [
             {
-                actor: toEosEntityName('app.oreid'),
+                actor: toEosEntityName(REACT_APP_TREASURY_OREID),
                 permission: toEosEntityName('active'),
             },
         ],
         data: { 
-            from: toEosEntityName('app.oreid'),
+            from: toEosEntityName(REACT_APP_TREASURY_OREID),
             to: toEosEntityName(user),
             quantity:  toEosAsset("5.0000", toEosSymbol('SYS'), 4),
             memo: "Add SYS from ORE Testnet Faucet"
@@ -403,7 +403,7 @@ export async function addSysToUser( user: string ): Promise<string> {
     let status: string = "None"
     const txnAction = createAddSysToUser( user )
     try {
-        status = await executeTxn( [txnAction], REACT_APP_APPOREID_ACTIVE_KEY )
+        status = await executeTxn( [txnAction], REACT_APP_TREASURY_ACTIVE_PRIV_KEY )
         console.log( `adding 5 SYS to User: ${status}` )
     }
     catch (error) {

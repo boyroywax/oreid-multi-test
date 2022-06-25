@@ -53,12 +53,11 @@ export const UserResources: React.FC = () => {
                 console.log( `Added 5 SYS Resources to ${user}` )
             })
             .catch((error) => console.error(error))
+            .finally(async () => await checkEligibility())
         }
     }
 
     const handleSign = async ( resource: string ) => {
-        console.error(undefined);
-        
         let transactionBody = undefined
         switch (resource) {
             case 'cpu':
@@ -108,6 +107,8 @@ export const UserResources: React.FC = () => {
                 console.log( `result: ${result}`);
             })
             .finally(() => console.log( `txnid: ${transaction.data.transactionRecordId}`));
+        
+            await checkEligibility()
     }
 
     useEffect(() => {
@@ -125,9 +126,10 @@ export const UserResources: React.FC = () => {
                                 <LoginButton
                                     provider="oreid"
                                     text="Add SYS to User"
-                                    onClick={() => 
+                                    onClick={() => {
                                         transferSys( chainAccount )
-                                    }
+                                        checkEligibility()
+                                    }}
                                 /> :  
                                 <Button
                                     onClick={() => 

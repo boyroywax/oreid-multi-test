@@ -39,9 +39,12 @@ export const OreFaucet: React.FC = () => {
     }
 
     const claimFaucet = async () => {
+        await checkEligibility()
+
         if (eligibleSend) {
             const claimStatus: string = await callFaucetSend({amount: "100", recipient: chainAccount})
             console.log( `claimStatus: ${claimStatus}` )
+            await checkEligibility()
         }
     }
 
