@@ -22,6 +22,7 @@ const callFaucetSend = async ({
 export const OreFaucet: React.FC = () => {
     const user = useUser()
     const[ eligibleSend, setEligibleSend ] = useState(false)
+    const[ txOutput, setTxOutput ] = useState("None")
 
     const recipientAccount = user?.chainAccounts.find(
         (ca) => ca.chainNetwork === "ore_test"
@@ -44,6 +45,9 @@ export const OreFaucet: React.FC = () => {
         if (eligibleSend) {
             const claimStatus: string = await callFaucetSend({amount: "100", recipient: chainAccount})
             console.log( `claimStatus: ${claimStatus}` )
+
+            setTxOutput( claimStatus )
+            
             await checkEligibility()
         }
     }

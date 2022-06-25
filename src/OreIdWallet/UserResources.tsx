@@ -14,11 +14,10 @@ import { Button } from "src/Button";
 
 
 const callUserAddSys = async ( user: string ): Promise<string> => {
-	const response = await fetch(
-		`/api/user_add_sys?user=${user}`
-	)
-
-	return response.text()
+    const response = await fetch(
+        `/api/user_add_sys?user=${user}`
+    )
+    return response.text()
 }
 
 export const UserResources: React.FC = () => {
@@ -81,7 +80,6 @@ export const UserResources: React.FC = () => {
                 )
                 break
         }
-
 
         if (!transactionBody) {
             console.error("Transaction cannot be created")
