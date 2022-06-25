@@ -6,7 +6,7 @@ export const oreTestNetEndpoint: { url: string } = {
 };
 
 export async function getOreBalance(accountName: string): Promise<string> {
-    let balance: string = "0.0000"
+    let balance: string = "0.0000 ORE"
     const rpc = new JsonRpc(oreTestNetEndpoint.url)
     console.log(accountName)
     console.log(rpc)
@@ -25,7 +25,7 @@ export async function getOreBalance(accountName: string): Promise<string> {
 }
 
 export async function getSysBalance(accountName: string): Promise<string> {
-    let balance: string = "0.0000"
+    let balance: string = "0.0000 SYS"
     const rpc = new JsonRpc(oreTestNetEndpoint.url)
     console.log(accountName)
     console.log(rpc)

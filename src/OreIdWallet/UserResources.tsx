@@ -1,6 +1,6 @@
-import { UserData } from "oreid-js";
+import { ChainNetwork, UserData } from "oreid-js";
 import { useOreId, useUser } from "oreid-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LoginButton from "oreid-login-button"
 
 import { 
@@ -9,6 +9,8 @@ import {
     createAddNetToUser,
     createAddRamToUser
 } from "../helpers/composeTransaction"
+import { getSysBalance } from "src/helpers/eos";
+import { Button } from "src/Button";
 
 
 const callUserAddSys = async ( user: string ): Promise<string> => {
@@ -22,28 +24,36 @@ const callUserAddSys = async ( user: string ): Promise<string> => {
 export const UserResources: React.FC = () => {
     const user: UserData | undefined = useUser()
     const oreId = useOreId();
+    const[ eligible, setEligible ] = useState(false)
     const oreChainType = 'ore_test'
 
-	if (!user) return null;
-
-    const transferSys = async ( user: string ) => {
-        callUserAddSys( user )
-        .then( () => {
-            console.log( `Added 5 SYS Resources to ${user}` )
-        })
-        .catch((error) => console.error(error))
-    }
-
     // get first ore (e.g. ore_test) account in user's wallet
-    const signingAccount = user.chainAccounts.find(
+    const signingAccount = user?.chainAccounts.find(
         (ca) => ca.chainNetwork === oreChainType
     )
 
-    if (!signingAccount) {
-        console.error(
-            `User doesn not have any accounts on ${oreChainType}`
-        )
-        return null;
+    const chainAccount = signingAccount?.chainAccount || ""
+    const chainNetwork = signingAccount?.chainNetwork || ChainNetwork.OreTest
+
+    const checkEligibility = async (): Promise<void> => {
+        let eligibility = false
+        const balance = await getSysBalance(chainAccount)
+        if (Number(balance.split(' ')[0]) <= 100) {
+            eligibility = true
+        }
+        setEligible( eligibility )
+    }
+
+    const transferSys = async ( user: string ) => {
+        await checkEligibility()
+
+        if (eligible) {
+            callUserAddSys( user )
+            .then( () => {
+                console.log( `Added 5 SYS Resources to ${user}` )
+            })
+            .catch((error) => console.error(error))
+        }
     }
 
     const handleSign = async ( resource: string ) => {
@@ -53,22 +63,22 @@ export const UserResources: React.FC = () => {
         switch (resource) {
             case 'cpu':
                 transactionBody = createAddCpuToUser(
-                    signingAccount.chainAccount
+                    chainAccount
                 )
                 break
             case 'net':
                 transactionBody = createAddNetToUser(
-                    signingAccount.chainAccount
+                    chainAccount
                 )
                 break
             case 'ram':
                 transactionBody = createAddRamToUser(
-                    signingAccount.chainAccount
+                    chainAccount
                 )
                 break
             case 'cpunet':
                 transactionBody = createAddCpuAndNetToUser(
-                    signingAccount.chainAccount
+                    chainAccount
                 )
                 break
         }
@@ -82,8 +92,8 @@ export const UserResources: React.FC = () => {
         console.log("transactionBody:", transactionBody)
 
         const transaction = await oreId.createTransaction({
-            chainAccount: signingAccount.chainAccount,
-            chainNetwork: signingAccount.chainNetwork,
+            chainAccount: chainAccount,
+            chainNetwork: chainNetwork,
             //@ts-ignore
             transaction: transactionBody,
             signOptions: {
@@ -99,6 +109,11 @@ export const UserResources: React.FC = () => {
             })
             .finally(() => console.log( `txnid: ${transaction.data.transactionRecordId}`));
     }
+
+    useEffect(() => {
+        checkEligibility()
+    })
+
     return (
         <>
             <h1>User Resources</h1>
@@ -106,13 +121,20 @@ export const UserResources: React.FC = () => {
                 <tbody>
                     <tr>
                         <td>
-                            <LoginButton
-                                provider="oreid"
-                                text="Add SYS to User"
-                                onClick={() => 
-                                    transferSys( signingAccount.chainAccount )
+                            { eligible ? 
+                                <LoginButton
+                                    provider="oreid"
+                                    text="Add SYS to User"
+                                    onClick={() => 
+                                        transferSys( chainAccount )
+                                    }
+                                /> :  
+                                <Button
+                                    onClick={() => 
+                                        checkEligibility()
+                                    }
+                                >Already Claimed!</Button>
                                 }
-                            />
                         </td>
                         <td>Add 5 SYS Test Net Tokens</td>
                         <td></td>

@@ -1,6 +1,7 @@
 import { useUser } from "oreid-react"
-import React from "react"
-import LoginButton from "oreid-login-button"
+import React, { useEffect, useState } from "react"
+import { Button } from "src/Button";
+import { getOreBalance } from "src/helpers/eos";
 
 
 const callFaucetSend = async ({
@@ -20,29 +21,46 @@ const callFaucetSend = async ({
 
 export const OreFaucet: React.FC = () => {
     const user = useUser()
+    const[ eligible, setEligible ] = useState(false)
 
     const recipientAccount = user?.chainAccounts.find(
         (ca) => ca.chainNetwork === "ore_test"
     )
 
-    const claimFaucet = async () => {
-        const chainAccount = recipientAccount?.chainAccount || ""
-        const claimStatus: string = await callFaucetSend({amount: "100", recipient: chainAccount})
-        console.log( `claimStatus: ${claimStatus}` )
+    const chainAccount = recipientAccount?.chainAccount || ""
+
+    const checkEligibility = async (): Promise<void> => {
+        let eligibility = false
+        const balance = await getOreBalance(chainAccount || "")
+        if (Number(balance.split(' ')[0]) <= 99) {
+            eligibility = true
+        }
+        setEligible( eligibility )
     }
 
+    const claimFaucet = async () => {
+        if (eligible) {
+            const claimStatus: string = await callFaucetSend({amount: "100", recipient: chainAccount})
+            console.log( `claimStatus: ${claimStatus}` )
+        }
+    }
+
+    useEffect(() => {
+        checkEligibility()
+    })
 
     return (
         <>
             <h1>ORE TestNet Faucet</h1>
             <br />
-            <LoginButton
-                provider="oreid"
-                text="Claim Faucet!"
-                onClick={() => 
-                    claimFaucet()
-                }
-            />
+            { eligible ?
+                <Button
+                    onClick={() => 
+                        claimFaucet()
+                    }
+                > Claim Now </Button> : 
+                <Button>Already Claimed!</Button>
+            }
         </>
     )
 }

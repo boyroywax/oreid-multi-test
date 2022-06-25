@@ -7,8 +7,8 @@ import "./App.css";
 import { ExternalWallet } from "./ExternalWallet";
 import { Header } from "./Header";
 import { LoginPage } from "./LoginPage";
-import { FaucetAdmin, OreFaucet, SendTransfer } from "./OreFaucet";
-import { AccountInfo, UserBalance, UserResources } from "./OreIdWallet";
+import { FaucetAdmin, OreFaucet } from "./OreFaucet";
+import { AccountInfo, SendTransfer, UserBalance, UserResources } from "./OreIdWallet";
 import { REACT_APP_OREID_APP_ID } from "./constants";
 
 
