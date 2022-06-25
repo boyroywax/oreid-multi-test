@@ -38,7 +38,7 @@ export const UserResources: React.FC = () => {
     const checkEligibility = async (): Promise<void> => {
         let eligibility = false
         const balance = await getSysBalance(chainAccount)
-        if (Number(balance.split(' ')[0]) <= 100) {
+        if (Number(balance.split(' ')[0]) <= 4.9999) {
             eligibility = true
         }
         setEligible( eligibility )

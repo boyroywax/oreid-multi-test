@@ -30,6 +30,14 @@ const oreId = new OreId({
 
 const LoggedInView: React.FC = () => {
 	const user = useUser();
+	const isAdmin = (): boolean => {
+		if (user?.accountName === 'ore1tw1xk1mf') {
+			return true
+		}
+		else {
+			return false
+		}
+	}
 	if (!user) return null;
 	return (
 		<>
@@ -39,7 +47,8 @@ const LoggedInView: React.FC = () => {
 			<SendTransfer />
 			<AccountInfo />
 			<ExternalWallet />
-			<FaucetAdmin />
+			{ isAdmin() ?
+				<FaucetAdmin /> : () => null }
 		</>
 	)
 };

@@ -21,7 +21,7 @@ const callFaucetSend = async ({
 
 export const OreFaucet: React.FC = () => {
     const user = useUser()
-    const[ eligible, setEligible ] = useState(false)
+    const[ eligibleSend, setEligibleSend ] = useState(false)
 
     const recipientAccount = user?.chainAccounts.find(
         (ca) => ca.chainNetwork === "ore_test"
@@ -35,11 +35,11 @@ export const OreFaucet: React.FC = () => {
         if (Number(balance.split(' ')[0]) <= 99) {
             eligibility = true
         }
-        setEligible( eligibility )
+        setEligibleSend( eligibility )
     }
 
     const claimFaucet = async () => {
-        if (eligible) {
+        if (eligibleSend) {
             const claimStatus: string = await callFaucetSend({amount: "100", recipient: chainAccount})
             console.log( `claimStatus: ${claimStatus}` )
         }
@@ -53,13 +53,18 @@ export const OreFaucet: React.FC = () => {
         <>
             <h1>ORE TestNet Faucet</h1>
             <br />
-            { eligible ?
+            { eligibleSend ?
                 <Button
                     onClick={() => 
                         claimFaucet()
                     }
                 > Claim Now </Button> : 
-                <Button>Already Claimed!</Button>
+                <Button
+                    onClick={() =>
+                        checkEligibility()
+                    }
+                >Already Claimed!
+                </Button>
             }
         </>
     )
