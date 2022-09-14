@@ -44,6 +44,27 @@ const callFaucetAddRam = async (): Promise<string> => {
     return response.text()
 }
 
+const callUserAddSys = async ( user: string ): Promise<string> => {
+    const response = await fetch(
+        `/api/user_add_sys?user=${user}`
+    )
+    return response.text()
+}
+
+const callFaucetAddSysSystem = async (): Promise<string> => {
+    const response = await fetch(
+        `/api/faucet_add_sys_system`
+    )
+    return response.text()
+}
+
+const callFaucetAddRamSystem = async (): Promise<string> => {
+    const response = await fetch(
+        `/api/faucet_add_ram_system`
+    )
+    return response.text()
+}
+
 export const FaucetAdmin: React.FC = () => {
     const addOre = async () => {
         const response = await callFaucetAddOre()
@@ -76,6 +97,23 @@ export const FaucetAdmin: React.FC = () => {
         })
         .catch((error) => console.error(error))
     }
+
+    const addSysSystem = async () => {
+        await callFaucetAddSysSystem()
+        .then(async (response) => {
+            console.log( `Added 100 SYS to system.ore: \n${response}` )
+        })
+        .catch((error) => console.error(error))
+    }
+
+    const addRamSystem = async () => {
+        await callFaucetAddRamSystem()
+        .then(async (response) => {
+            console.log( `Added 260000 Bytes RAM to system.ore: \n${response}` )
+        })
+        .catch((error) => console.error(error))
+    }
+
 
     const [ faucetBalance, setFaucetBalance ] = useState("0.00")
     const [ faucetSysBalance, setFaucetSysBalance ] = useState("0.00")
@@ -150,6 +188,30 @@ export const FaucetAdmin: React.FC = () => {
                             />
                         </td>
                         <td>Add 100,000 Bytes of RAM</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <LoginButton
+                                provider="oreid"
+                                text="Add RAM to system.ore"
+                                onClick={() => 
+                                    addRamSystem()
+                                }
+                            />
+                        </td>
+                        <td>Add 260,000 Bytes of RAM to system.ore</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <LoginButton
+                                provider="oreid"
+                                text="Add SYS to system.ore"
+                                onClick={() => 
+                                    addSysSystem()
+                                }
+                            />
+                        </td>
+                        <td>Add 100 SYS to system.ore</td>
                     </tr>
                 </tbody>
             </table>

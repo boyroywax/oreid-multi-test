@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LoginButton from "oreid-login-button"
 import { useOreId, useUser } from "oreid-react";
 import { createUserTransferTransaction } from "src/helpers/composeTransaction";
+import { WebWidgetSignResult } from "oreid-js";
 
 // interface Props {
 // 	amount: string
@@ -61,10 +62,10 @@ export const SendTransfer: React.FC = () => {
 
 		oreId.popup
 			.sign({ transaction })
-			.then((result: any) => {
+			.then((result: WebWidgetSignResult) => {
 				console.log( `result: ${result}`);
+				console.log( `txnid: ${result.transactionId}`)
 			})
-			.finally(() => console.log( `txnid: ${transaction.data.transactionRecordId}`));
     }
 
     return (

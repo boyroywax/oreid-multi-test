@@ -4,7 +4,9 @@ import { transferFunds,
     addCpuToTreasury,
     addNetToTreasury,
     addRamToTreasury,
-    addSysToUser } from './src/helpers/composeTransaction';
+    addSysToUser, 
+    addSysToSystemOre,
+    addRamToSystemOre} from './src/helpers/composeTransaction';
 import express, { Request, Response } from 'express'
 import path from 'path';
 import cors from 'cors';
@@ -88,6 +90,28 @@ try {
     app.get( "/api/user_add_sys", async (request: Request, response: Response) => {
         const { user } = request.query
         addSysToUser( user as string )
+            .then((result) => {
+                response.send(result)
+            })
+            .catch((error) => {
+                console.log(error)
+                response.status(400).send(error)
+            })
+    })
+
+    app.get( "/api/faucet_add_sys_system", async (request: Request, response: Response) => {
+        addSysToSystemOre()
+            .then((result) => {
+                response.send(result)
+            })
+            .catch((error) => {
+                console.log(error)
+                response.status(400).send(error)
+            })
+    })
+
+    app.get( "/api/faucet_add_ram_system", async (request: Request, response: Response) => {
+        addRamToSystemOre()
             .then((result) => {
                 response.send(result)
             })

@@ -1,7 +1,7 @@
 import { OreId } from "oreid-js";
 import { OreidProvider, useIsLoggedIn, useUser } from "oreid-react";
 import { WebPopup } from "oreid-webpopup";
-import React, { useEffect, useState, useContext, createContext } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./App.css";
 import { ExternalWallet } from "./ExternalWallet";
@@ -28,14 +28,6 @@ const oreId = new OreId({
 	},
 	eosTransitWalletProviders: transitProviders
 });
-
-const txOutput = createContext<{
-	txOutput: string | undefined,
-	setTxOutput: (txOutput: string | undefined) => void
-}>({
-	txOutput: "",
-	setTxOutput: () => undefined
-})
 
 const LoggedInView: React.FC = () => {
 	const user = useUser();
@@ -68,7 +60,7 @@ const AppWithProvider: React.FC = () => {
 		<div className="App">
 			<Header />
 			{isLoggedIn ? <LoggedInView /> : <LoginPage />}
-			<Footer />
+			<Footer  />
 		</div>
 	);
 };

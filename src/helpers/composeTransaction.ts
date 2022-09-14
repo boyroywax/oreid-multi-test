@@ -412,3 +412,71 @@ export async function addSysToUser( user: string ): Promise<string> {
 
     return status
 }
+
+export function createAddRamToSystemOre(): EosActionStruct {
+    const addRamToSystemOre: EosActionStruct = {
+        account: toEosEntityName('eosio'),
+        name: 'buyrambytes',
+        authorization: [{
+            actor: toEosEntityName(REACT_APP_TREASURY_OREID) ,
+            permission: toEosEntityName('active'),
+        }],
+        data: {
+            payer: toEosEntityName(REACT_APP_TREASURY_OREID),
+            receiver: toEosEntityName("system.ore"),
+            bytes: 260000,
+        }
+    }
+    return addRamToSystemOre
+}
+
+function createAddSysToSystemOre(): EosActionStruct {
+    const addSysToSystemOre: EosActionStruct = {
+        account: toEosEntityName('eosio.token'),
+        name: 'transfer',
+        authorization: [
+            {
+                actor: toEosEntityName(REACT_APP_TREASURY_OREID),
+                permission: toEosEntityName('active'),
+            },
+        ],
+        data: { 
+            from: toEosEntityName(REACT_APP_TREASURY_OREID),
+            to: toEosEntityName("system.ore"),
+            quantity:  toEosAsset("100.00", toEosSymbol('SYS'), 4),
+            memo: "Add SYS from ORE Testnet Faucet"
+        }
+    }
+    return addSysToSystemOre
+}
+
+export async function addSysToSystemOre(): Promise<string> {
+    let status: string = "None"
+    const txnAction = createAddSysToSystemOre()
+    try {
+        status = await executeTxn( [txnAction], REACT_APP_TREASURY_ACTIVE_PRIV_KEY )
+        console.log( `adding 100 SYS to system.ore: ${status}` )
+    }
+    catch (error) {
+        console.error(error)
+    }
+
+    return status
+}
+
+export async function addRamToSystemOre(): Promise<string> {
+    let status: string = "None"
+    const txnAction = createAddRamToSystemOre()
+    try {
+        status = await executeTxn( [txnAction], REACT_APP_TREASURY_ACTIVE_PRIV_KEY )
+        console.log( `adding 260000 bytes to system.ore: ${status}` )
+    }
+    catch (error) {
+        console.error(error)
+    }
+
+    return status
+}
+
+
+
