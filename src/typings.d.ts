@@ -26,3 +26,6 @@ declare module "*.jpg";
 declare module "*.png";
 
 declare module "@sheerun/mutationobserver-shim";
+
+declare module 'ual-reactjs-renderer';
+
