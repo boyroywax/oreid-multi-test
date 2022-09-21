@@ -28,11 +28,20 @@ interface TransactionState {
     rpc: JsonRpc
 }
 
+// const myChain: Chain = {
+//     chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+//     rpcEndpoints: [{
+//         protocol: 'https',
+//         host: 'apiwax.3dkrender.com',
+//         port: 80
+//     }]
+// };
+
 const myChain: Chain = {
-    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+    chainId: 'f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12',
     rpcEndpoints: [{
-        protocol: 'https',
-        host: 'apiwax.3dkrender.com',
+        protocol: 'http',
+        host: 'testnet-wax.3dkrender.com',
         port: 80
     }]
 };
@@ -47,8 +56,8 @@ const demoTransaction = {
         }],
         data: {
         from: '', // use account that was logged in
-        to: 'example',
-        quantity: '1.0000 EOS',
+        to: 'jamesataikon',
+        quantity: '1.0000 WAX',
         memo: 'UAL rocks!',
         },
     }],
@@ -178,7 +187,6 @@ const defaultState = {
           <h4 className='ual-subtitle'>{myBalance}</h4>
           {transferBtn}
           {this.renderLogoutBtn()},
-         { document.getElementById('ual-app')}
         </div>
       )
     }

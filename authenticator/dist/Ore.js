@@ -140,7 +140,7 @@ class OreUal extends universal_authenticator_library_1.Authenticator {
      * Login using the Authenticator App. This can return one or more users depending on multiple chain support.
      */
     async login() {
-        console.log(`ORE-WAX: login requested`);
+        console.log(`ORE-UAL: login requested`);
         // Commented for now to support multiple wax chains such as testnets/staging in the future
         // Mainnet check:  this.chains[0].chainId !== '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4'
         // if (this.chains.length > 1) {
@@ -188,7 +188,7 @@ class OreUal extends universal_authenticator_library_1.Authenticator {
             //     UALErrorType.Login,
             //     null
             // )
-            throw Error("error loging in");
+            throw Error("error loging in", e);
         }
     }
     /**
@@ -196,10 +196,11 @@ class OreUal extends universal_authenticator_library_1.Authenticator {
      */
     async logout() {
         // this.initWaxJS();
+        await this.oreId.logout()
         this.users = [];
         this.session = undefined;
-        localStorage.setItem('ual-wax:autologin', 'null');
-        console.log(`UAL-WAX: logout`);
+        localStorage.setItem('ual-ore:autologin', 'null');
+        console.log(`UAL-ORE: logout`);
     }
     /**
      * Returns true if user confirmation is required for `getKeys`
@@ -211,7 +212,7 @@ class OreUal extends universal_authenticator_library_1.Authenticator {
      * Returns name of authenticator for persistence in local storage
      */
     getName() {
-        return 'wax';
+        return 'ore';
     }
     receiveLogin(userAccount, pubKeys) {
         if (!this.oreId) {
@@ -227,7 +228,7 @@ class OreUal extends universal_authenticator_library_1.Authenticator {
         if (!login.userAccount || !login.pubKeys) {
             return;
         }
-        localStorage.setItem('ual-wax:autologin', JSON.stringify(login));
+        localStorage.setItem('ual-ore:autologin', JSON.stringify(login));
         this.session = login;
     }
     // private initWaxJS() {

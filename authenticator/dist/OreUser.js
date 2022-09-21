@@ -26,16 +26,16 @@ class OreUser extends universal_authenticator_library_1.User {
         console.log(transaction1)
         console.log(options)
         const transaction = await this.ore.createTransaction({
-            chainAccount: this.accountName,
-            chainNetwork: oreid_js_1.ChainNetwork.WaxTest,
+            chainAccount: transaction1.actions[0].authorization[0].actor,
+            chainNetwork: oreid_js_1.ChainNetwork.WaxMain,
             //@ts-ignore
-            transaction: transaction1,
+            transaction: transaction1.actions[0],
             signOptions: {
                 broadcast: true,
                 returnSignedTransaction: false,
             },
         });
-        await this.ore.popup.sign({ transaction }).then(({result}) => {
+        await this.ore.popup.sign({ transaction }).then((result) => {
             console.log(result);
             const signedResponse = {
                 /** Was the transaction broadcast */
@@ -54,7 +54,7 @@ class OreUser extends universal_authenticator_library_1.User {
                     name: "Name"
                 },
                 /** The raw transaction object */
-                transaction: transactionRaw
+                // transaction: transaction1.data
             };
             this.transactioncomplete = signedResponse;
         });
