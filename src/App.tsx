@@ -46,51 +46,6 @@ const LoggedInView: React.FC = () => {
 			return false
 		}
 	}
-	const myChain: Chain = {
-		chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
-		rpcEndpoints: [{
-			protocol: 'https',
-			host: 'apiwax.3dkrender.com',
-			port: 80
-		}]
-	};
-	
-	const demoTransaction = {
-		actions: [{
-			account: 'eosio.token',
-			name: 'transfer',
-			authorization: [{
-			actor: '', // use account that was logged in
-			permission: 'active',
-			}],
-			data: {
-			from: '', // use account that was logged in
-			to: 'example',
-			quantity: '1.0000 EOS',
-			memo: 'UAL rocks!',
-			},
-		}],
-	}
-	
-	const EXAMPLE_ENV =  {
-		CHAIN_ID: myChain.chainId ,
-		RPC_PROTOCOL: myChain.rpcEndpoints[0].protocol,
-		RPC_HOST: myChain.rpcEndpoints[0].host,
-		RPC_PORT: myChain.rpcEndpoints[0].port
-	}
-	
-	// const TestAppConsumer = withUAL(TestApp)
-	
-	const defaultState = {
-		activeUser: null,
-		accountName: '',
-		accountBalance: null,
-	  }
-      const chains: Chain[] = [myChain]
-        const oreUal: any = new OreUal(chains)
-	  const ual = new UAL(chains, "Authenticator Test App", [oreUal],)
-	//   const authenticators: any = ual.getAuthenticators()
-	//   console.log(authenticators)
 	
 
 	if (!user) return null;
@@ -102,8 +57,8 @@ const LoggedInView: React.FC = () => {
 			<SendTransfer />
 			<AccountInfo />
 			<ExternalWallet />
-			<Ual ual={ual}/>
-			<button onClick={() => ual}>Login with UAL</button>
+			<Ual />
+			{/* <button onClick={() => ual}>Login with UAL</button> */}
 			{ isAdmin() ?
 				<FaucetAdmin /> : () => null }
 		</>

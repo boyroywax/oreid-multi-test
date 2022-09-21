@@ -1,18 +1,18 @@
 import React from "react"
 import { useOreId, useUser } from "oreid-react"
-import { AuthProvider,
-    ChainNetwork,
-    ExternalWalletType,
-    PopupPluginAuthParams,
-    PopupPluginSignParams,
-    SignStringParams,
-    Transaction,
-    TransactionData,
-    TransactionSignOptions } from "oreid-js"
+// import { AuthProvider,
+//     ChainNetwork,
+//     ExternalWalletType,
+//     PopupPluginAuthParams,
+//     PopupPluginSignParams,
+//     SignStringParams,
+//     Transaction,
+//     TransactionData,
+//     TransactionSignOptions } from "oreid-js"
 import { Button } from "src/Button"
 import { OreUser } from "authenticator"
 import { OreUal } from "authenticator"
-import { UALProvider, withUAL, showModal, UALBox, UALContainer  } from 'ual-reactjs-renderer'
+import { UALProvider, withUAL } from 'ual-reactjs-renderer'
 import { JsonRpc } from 'eosjs'
 import { Authenticator, Chain, User, UALError, UAL } from 'universal-authenticator-library';
 import { TRANSACTION_FEE_PRIORITY_MULTIPLIERS } from "@open-rights-exchange/chainjs/dist/chains/algorand_1"
@@ -113,13 +113,18 @@ const defaultState = {
       }
     }
   
-    public async transfer() {
-      const { accountName, activeUser } = this.state
+    public transfer() {
+        console.log("initaiting trnasfer")
+      const { accountName, activeUser }:{accountName: string, activeUser: OreUser } = this.state
       demoTransaction.actions[0].authorization[0].actor = accountName
       demoTransaction.actions[0].data.from = accountName
+      console.log(demoTransaction)
+      console.log(accountName)
       try {
-        await activeUser.signTransaction(demoTransaction, { broadcast: true })
-        await this.updateAccountBalance()
+        activeUser.signTransaction(demoTransaction, { broadcast: true }).then((values) => {
+            console.log(values)
+        })
+        // await this.updateAccountBalance()
       } catch (error) {
         console.warn(error)
       }
@@ -308,25 +313,11 @@ const defaultState = {
   
 
 
-export const Ual: React.FC<TransactionProps> = (props) => {
+export const Ual: React.FC = () => {
 
-    const oreId = useOreId()
-    const user = useUser()
+    // const oreId = useOreId()
+    // const user = useUser()
     // const showmodal = ual.showModal
-    const renderModalButton = () => {
-      return (
-        <p className='ual-btn-wrapper'>
-          <span
-            role='button'
-            onClick={props.ual.showModel}
-            className='ual-generic-button'>Show UAL Modal</span>
-        </p>
-      )
-    }
-    
-    const getUAL = () => {
-        props.ual.getAuthenticators()
-    }
       
       const TestAppConsumer = withUAL(TransactionApp)
       const chains: Chain[] = [myChain]
