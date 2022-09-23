@@ -34,8 +34,6 @@ const oreId = new OreId({
 	eosTransitWalletProviders: transitProviders
 });
 
-
-
 const LoggedInView: React.FC = () => {
 	const user = useUser();
 	const isAdmin = (): boolean => {
