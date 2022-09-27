@@ -15,7 +15,6 @@ import { OreUal } from "authenticator"
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
 import { JsonRpc } from 'eosjs'
 import { Authenticator, Chain, User, UALError, UAL } from 'universal-authenticator-library';
-import { TRANSACTION_FEE_PRIORITY_MULTIPLIERS } from "@open-rights-exchange/chainjs/dist/chains/algorand_1"
 
 interface TransactionProps {
     ual: any
@@ -46,22 +45,22 @@ const myChain: Chain = {
     }]
 };
 
-const demoTransaction = {
-    actions: [{
-        account: 'eosio.token',
-        name: 'transfer',
-        authorization: [{
-        actor: '', // use account that was logged in
-        permission: 'active',
+  const demoTransaction = {
+      actions: [{
+          account: 'eosio.token',
+          name: 'transfer',
+          authorization: [{
+          actor: '', // use account that was logged in
+          permission: 'active',
         }],
         data: {
-        from: '', // use account that was logged in
-        to: 'jamesataikon',
-        quantity: '1.0000 WAX',
-        memo: 'UAL rocks!',
+          from: '', // use account that was logged in
+          to: 'jamesataikon',
+          quantity: '1.00000000 WAX',
+          memo: 'UAL rocks!',
         },
-    }],
-}
+      }],
+  }
 
 const EXAMPLE_ENV =  {
     CHAIN_ID: myChain.chainId ,

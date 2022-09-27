@@ -27,8 +27,7 @@ class OreUser extends universal_authenticator_library_1.User {
         console.log(options)
         const transaction = await this.ore.createTransaction({
             chainAccount: transaction1.actions[0].authorization[0].actor,
-            // chainNetwork: oreid_js_1.ChainNetwork.WaxTest,\
-            chainNetwork: "wax_test",
+            chainNetwork: oreid_js_1.ChainNetwork.WaxTest,
             //@ts-ignore
             transaction: transaction1.actions[0],
             signOptions: {
@@ -36,16 +35,15 @@ class OreUser extends universal_authenticator_library_1.User {
                 returnSignedTransaction: false,
             },
         });
-        console.log(transaction)
         await this.ore.popup.sign({ transaction }).then((result) => {
             console.log(result);
             const signedResponse = {
                 /** Was the transaction broadcast */
                 wasBroadcast: true,
                 /** The transcation id (optional) */
-                transactionId: result.transactionId,
+                transactionId: "000912123",
                 /** The status of the transaction as returned by the RPC API (optional) */
-                status: result.status,
+                status: "TestMode",
                 /** Set if there was an error */
                 error: {
                     /** The error code */
