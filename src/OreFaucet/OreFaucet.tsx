@@ -1,4 +1,6 @@
-import { useUser } from "oreid-react"
+import { AccountType, OreId } from "oreid-js";
+import { ApiCustodialNewAccountBodyParams, ApiCustodialNewAccountParams } from "oreid-js/dist/api";
+import { useUser, useOreId } from "oreid-react"
 import React, { useEffect, useState } from "react"
 import { Button } from "src/Button";
 import { getOreBalance } from "src/helpers/eos";
@@ -21,6 +23,7 @@ const callFaucetSend = async ({
 
 export const OreFaucet: React.FC = () => {
     const user = useUser()
+    const oreId = useOreId()
     const[ eligibleSend, setEligibleSend ] = useState(false)
     const[ txOutput, setTxOutput ] = useState("None")
 
@@ -52,6 +55,20 @@ export const OreFaucet: React.FC = () => {
         }
     }
 
+    const create_custodial_account = async () => {
+        const params: ApiCustodialNewAccountParams ={
+            "accountType": AccountType.Pending,
+            "userPassword": "2233",
+            "name": "Tray Aikon Test",
+            "userName": "traytest",
+            "email": "tray+test0917b@aikon.com",
+            "picture": "https://notavalidurl.io//nothing.jpg",
+            "phone": "+12223334444",
+            // "is_test_user": true
+        }
+        await oreId.custodialNewAccount(params)
+    }
+
     useEffect(() => {
         checkEligibility()
     })
@@ -72,7 +89,13 @@ export const OreFaucet: React.FC = () => {
                     }
                 >Already Claimed!
                 </Button>
-            }
+                }
+                <Button
+                    onClick={() =>
+                      create_custodial_account()
+                    }
+                >Create Custodial Account!
+            </Button>
         </>
     )
 }
