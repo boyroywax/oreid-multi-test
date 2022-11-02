@@ -30,11 +30,10 @@ export const SendTransfer: React.FC = () => {
 		)
 
 		if (!signingAccount) {
-			console.error(
-				`User does not have any accounts on ${oreChainType}`
-			)
+			console.error(`User does not have an ${oreChainType} account.`)
 			return
 		}
+
 
 		const transactionBody = await createUserTransferTransaction(
 			signingAccount.chainAccount,
