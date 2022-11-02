@@ -6,6 +6,8 @@
     "node": "16.x.x"
   },
   "dependencies": {
+    "@open-rights-exchange/chain-js": "^4.9.1",
+    "@open-rights-exchange/chain-js-plugin-ethereum": "^4.12.0",
     "@open-rights-exchange/chainjs": "^3.4.2",
     "@types/js-cookie": "^3.0.2",
     "atomicassets": "^1.4.2",

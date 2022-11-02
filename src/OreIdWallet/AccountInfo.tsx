@@ -1,4 +1,4 @@
-import { UserData } from "oreid-js";
+import { OreId, UserData } from "oreid-js";
 import { useUser } from "oreid-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "src/Button";

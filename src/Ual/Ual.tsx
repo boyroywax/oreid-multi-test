@@ -15,6 +15,10 @@ import { OreUal } from "authenticator"
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
 import { JsonRpc } from 'eosjs'
 import { Authenticator, Chain, User, UALError, UAL } from 'universal-authenticator-library';
+import { Chain as ChainJs, ChainType, Helpers, Models, PluginChainFactory, Transaction } from "@open-rights-exchange/chain-js"
+import { Plugin as EthPlugin, ModelsEthereum, HelpersEthereum } from "@open-rights-exchange/chain-js-plugin-ethereum"
+import { ChainNetwork, WebWidgetSignResult } from "oreid-js"
+      
 
 interface TransactionProps {
     ual: any
@@ -322,8 +326,8 @@ const defaultState = {
 
 export const Ual: React.FC = () => {
 
-    // const oreId = useOreId()
-    // const user = useUser()
+    const oreId = useOreId()
+    const userData = useUser()
     // const showmodal = ual.showModal
       
       const TestAppConsumer = withUAL(TransactionApp)
@@ -340,9 +344,101 @@ export const Ual: React.FC = () => {
     //   }
     //   const newComponent = NewHOC(TestAppConsumer))
 
+    const nftToOpensea = async () => {
+      
+    // // const composedAction = async () => {
+    // //     await ethGeorli.composeAction(Models.ChainActionType.TokenTransferFrom)
+    // // }
+
+
+    // transaction.actions = [transactionAction]
+    const ethChainType = ChainNetwork.EthGoerli
+
+    const signingAccount = userData?.chainAccounts.find(
+        (ca) => ca.chainNetwork === ethChainType
+    )
+
+    const abi = [
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'from',
+                    type: 'address'
+                },
+                {
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address'
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256'
+                }
+            ],
+            name: "transferFrom",
+            outputs: [],
+            stateMutability: 'nonpayable', 
+            type: "function"
+        }
+    ];
+    
+    const contract = {
+        abi: abi,
+        method: "transferFrom",
+        parameters: [
+            signingAccount?.chainAccount,
+            "0x92B381515bd4851Faf3d33A161f7967FD87B1227",
+            "728654"
+        ]
+    }
+
+  const transactionAction = {
+      to: "0xf4910c763ed4e47a585e2d34baa9a4b611ae448c",
+      from: signingAccount?.chainAccount,
+      contract: contract
+  }
+
+  const transaction = {actions: {}}
+  transaction.actions = [transactionAction]
+
+    if (!signingAccount) {
+        console.error(
+            `User does not have any accounts on ${ethChainType}`
+        )
+        return
+    }
+    const transactionToSign = await oreId.createTransaction({
+        chainAccount: signingAccount.chainAccount,
+        chainNetwork: signingAccount.chainNetwork,
+        transaction: transaction,
+        signOptions: {
+            broadcast: true,
+            returnSignedTransaction: false
+        }
+    })
+    // console.log("actions" + JSON.stringify((transaction.actions)))
+    // await transaction.prepareToBeSigned()
+    // await transaction.validate()
+    // await transaction.getSuggestedFee(Models.TxExecutionPriority.Average)
+    console.log(transactionToSign)
+
+    oreId.popup.sign(
+        {
+            transaction: transactionToSign
+        }
+    )
+    .then((result: WebWidgetSignResult) => {
+        console.log( `result: ${JSON.stringify(result)}`);
+        console.log( `txnid: ${result.transactionId}`)
+    })
+
+}
    
 
     return (
+        <>
         <div>
             <UALProvider chains={[myChain]} authenticators={[oreUal]} appName='Authenticator Test App'>
                 {/* <UALContainer> */}
@@ -350,5 +446,12 @@ export const Ual: React.FC = () => {
                 {/* </UALContainer> */}
             </UALProvider>
         </div>
+
+        <div>
+            <button onClick={() => nftToOpensea()} >
+                NFTTOOPENSEA
+            </button>
+        </div>
+        </>
     )
 }

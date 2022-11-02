@@ -80,6 +80,7 @@ export const App: React.FC = () => {
 	useEffect(() => {
 		oreId.init().then(() => {
 			setOreidReady(true);
+			console.log(oreId.auth.isLoggedIn)
 		});
 	}, []);
 
