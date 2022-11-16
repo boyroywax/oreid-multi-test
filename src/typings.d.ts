@@ -29,3 +29,5 @@ declare module "@sheerun/mutationobserver-shim";
 
 declare module 'ual-reactjs-renderer';
 
+declare module 'wyvern-schemas';
+

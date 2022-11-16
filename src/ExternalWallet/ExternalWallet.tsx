@@ -45,7 +45,7 @@ export const ExternalWallet: React.FC = () => {
     // 
     const discoverWallet = () => {
         try {
-            const status = oreId.geExternalWalletInfo( signStringParam.walletType )
+            const status = oreId.getExternalWalletInfo( signStringParam.walletType )
             console.log( `Wallet status: ${JSON.stringify(status)}` )
         }
         catch (error) {
@@ -63,7 +63,7 @@ export const ExternalWallet: React.FC = () => {
     const loginAuthWithWallet = async() => {
         try {
             const status = await oreId.popup.auth( popupAuthParams )
-            console.log( `loginAuthWithWallet: ${status}`)
+            console.log( `loginAuthWithWallet: ${status}` )
         }
         catch (error) {
             console.error( `loginAuthWithWallet failed: ${error}` )

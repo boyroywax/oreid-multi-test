@@ -28,6 +28,15 @@ export const LoginPage: React.FC = () => {
 			.then(onSuccess)
 			.catch(onError);
 	};
+	const delayedLoginWithProvider = ( provider: AuthProvider ) => {
+		oreId.popup
+			.auth({
+				provider,
+				delayWalletSetup: true,
+			})
+			.then(onSuccess)
+			.catch(onError);
+	};
 
 	return (
 		<section className={styles.LoginPage}>
@@ -69,6 +78,36 @@ export const LoginPage: React.FC = () => {
 				className={styles.btnLogin}
 				onClick={() => {
 					loginWithProvider(AuthProvider.Email);
+				}}
+			>
+				<img src={LogoEmail} alt="" />
+				Email
+			</button>
+
+			<h3>Delay Account Creation</h3>
+
+			<button
+				className={styles.btnLogin}
+				onClick={() => {
+					delayedLoginWithProvider(AuthProvider.Facebook);
+				}}
+			>
+				<img src={LogoFb} alt="" />
+				<span>Facebook</span>
+			</button>
+			<button
+				className={styles.btnLogin}
+				onClick={() => {
+					delayedLoginWithProvider(AuthProvider.Google);
+				}}
+			>
+				<img src={LogoGoogle} alt="" />
+				Google
+			</button>
+			<button
+				className={styles.btnLogin}
+				onClick={() => {
+					delayedLoginWithProvider(AuthProvider.Email);
 				}}
 			>
 				<img src={LogoEmail} alt="" />

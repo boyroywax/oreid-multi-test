@@ -31,6 +31,7 @@ import { Deferrable } from "@ethersproject/properties"
 import { Bytes, Signer } from "ethers"
 import { WebPopup } from "oreid-webpopup"
 import Web3ProviderEngine from "web3-provider-engine"
+import AbstractConnector from "web3-react"
 
 interface TransactionProps {
     ual: any
@@ -86,7 +87,21 @@ connect(provider: Provider): Signer {
  }
 
  async signMessage(message: string | Bytes): Promise<string> {
-   return "not-today"
+  const txn_ = await this.oreId.createTransaction({
+    chainNetwork: ChainNetwork.EthGoerli,
+    chainAccount: this.chainAccount,
+    transaction: {
+      action: [
+        {messaage: message.toString() }
+      ]
+    },
+    signOptions: {
+      broadcast: false,
+      returnSignedTransaction: true
+    }
+
+  })
+  return JSON.stringify(txn_.data.signedTransaction) || "None"
  }
 
  async sendTransaction(transaction: any): Promise<TransactionResponse> {
